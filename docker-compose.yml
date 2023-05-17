@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgres:/data/sakamichi
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sakamichi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sakamichi46}
+      PGDATA: /data/sakamichi
+    ports:
+      - "5446:5432"
+    restart: unless-stopped
+  
+volumes:
+  postgres:
