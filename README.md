@@ -4,7 +4,7 @@
 [![License: MIT][license_badge]][license_link]
 [![Powered by Dart Frog](https://img.shields.io/endpoint?url=https://tinyurl.com/dartfrog-badge)](https://dartfrog.vgv.dev)
 
-An example application built with dart_frog
+Backend application maintaining data for mobilize wiki of Japanese idol groups called Sakamichi Series which consist of 3 different group that are based on unofficial web wiki, later will be implemented into flutter desktop app for a better way of API usage
 
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
