@@ -8,24 +8,24 @@ class GroupService {
   final PostgreSQLConnection connection;
 
   Future<void> insert(Group data) async {
-    await Group.insert(connection as PostgreSQLConnection, data.copyWith());
+    await Group.insert(connection, data.copyWith());
   }
 
   Future<Group?> selectOne(int id) async {
-    final data = await Group.selectOne(connection as PostgreSQLConnection, id);
+    final data = await Group.selectOne(connection, id);
     return data;
   }
 
   Future<List<Group>?> listAll() async {
-    final group = await Group.listAll(connection as PostgreSQLConnection);
+    final group = await Group.listAll(connection);
     return group;
   }
 
   Future<void> update(int id, Group data) async {
-    await Group.update(connection as PostgreSQLConnection, data, id);
+    await Group.update(connection, data, id);
   }
 
   Future<void> delete(int id) async {
-    await Group.delete(connection as PostgreSQLConnection, id);
+    await Group.delete(connection, id);
   }
 }

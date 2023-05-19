@@ -12,11 +12,11 @@ class Connection {
   }
   
   final int poolSize = 10;
-  final String host = dbHost;
-  final int port = dbPort;
-  final String database = env['database'] ?? dbName;
-  final String? username = env['username'];
-  final String? password = env['password'];
+  final String host = env['host'] as String;
+  final int port = int.parse(env['port'].toString());
+  final String database = env['database'] as String;
+  final String username = env['username'] as String;
+  final String password = env['password'] as String;
   final List<PostgreSQLConnection> _connections = [];
 
   static final DotEnv env = DotEnv()..load();
@@ -46,41 +46,4 @@ class Connection {
       await connection.close();
     }
   }
-  // factory Connection() {
-  //   _connection = PostgreSQLConnection(
-  //     dbHost,
-  //     dbPort,
-  //     env['database'] ?? dbName,
-  //     username: env['username'],
-  //     password: env['password'],
-  //   );
-  //   return _instance;
-  // }
-
-  // Connection._();
-
-  // static final Connection _instance = Connection._();
-
-  // static late PostgreSQLConnection _connection;
-
-
-  // Future<void> _openConnection() async {
-  //   if (_connection.isClosed) {
-  //     await _connection.open();
-  //     print('Database Connected');
-  //   }
-  // }
-
-  // Future<void> _closeConnection() async {
-  //   if (!_connection.isClosed) {
-  //     await _connection.close();
-  //     print('Database Disconnected');
-  //   }
-  // }
-
-  // Future<void> get connect => _openConnection();
-
-  // Future<void> get disconnect => _closeConnection();
-
-  // PostgreSQLConnection get getConnection => _connection;
 }

@@ -11,8 +11,8 @@ Middleware dbConnection(Connection connection) {
       try {
         await connection.openConnections();
         final response = await handler(context);
-        await connection.releaseConnection(connection.getConnection());
         await connection.closeConnections();
+        await connection.releaseConnection(connection.getConnection());
         return response;
       } catch (e) {
         return Response.json(

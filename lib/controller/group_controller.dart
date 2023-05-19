@@ -23,23 +23,10 @@ class GroupController {
 
   static Future<Response> updateGroup(RequestContext context, int id) async {
     final groupService = context.read<GroupService>();
-    // final group = await groupService.selectOne(id);
     final updatedGroup = Group.fromJson(
       await context.request.json() as Map<String, dynamic>,
     );
-    await groupService.update(id, updatedGroup
-        // group!.copyWith(
-        //   romaji_name: updatedGroup.romaji_name,
-        //   kanji_name: updatedGroup.kanji_name,
-        //   debut_date: updatedGroup.debut_date,
-        //   disband_date: updatedGroup.disband_date,
-        //   agency: updatedGroup.agency,
-        //   label: updatedGroup.label,
-        //   debut_single: updatedGroup.debut_single,
-        //   producer: updatedGroup.producer,
-        //   official_site: updatedGroup.official_site,
-        // ),
-        );
+    await groupService.update(id, updatedGroup);
     return Response.json(
       body: GeneralResponse(
         status: true,
