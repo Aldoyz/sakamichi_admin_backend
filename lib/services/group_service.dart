@@ -1,6 +1,7 @@
 import 'package:postgres/postgres.dart';
 
 import 'package:sakamichi_admin/models/group_model.dart';
+import 'package:sakamichi_admin/repository/group_repository.dart';
 
 class GroupService {
   GroupService(this.connection);
@@ -8,24 +9,24 @@ class GroupService {
   final PostgreSQLConnection connection;
 
   Future<void> insert(Group data) async {
-    await Group.insert(connection, data.copyWith());
+    await GroupRepository.insert(connection, data.copyWith());
   }
 
   Future<Group?> selectOne(int id) async {
-    final data = await Group.selectOne(connection, id);
+    final data = await GroupRepository.selectOne(connection, id);
     return data;
   }
 
   Future<List<Group>?> listAll() async {
-    final group = await Group.listAll(connection);
+    final group = await GroupRepository.listAll(connection);
     return group;
   }
 
   Future<void> update(int id, Group data) async {
-    await Group.update(connection, data, id);
+    await GroupRepository.update(connection, data, id);
   }
 
   Future<void> delete(int id) async {
-    await Group.delete(connection, id);
+    await GroupRepository.delete(connection, id);
   }
 }

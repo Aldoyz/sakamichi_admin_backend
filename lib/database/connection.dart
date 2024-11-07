@@ -1,16 +1,11 @@
 import 'package:dotenv/dotenv.dart';
-import 'package:pool/pool.dart';
 import 'package:postgres/postgres.dart';
-// import 'package:postgres_pool/postgres_pool.dart';
-
-import 'package:sakamichi_admin/utils/constant.dart';
 
 class Connection {
-  
   Connection() {
     assert(poolSize > 0, 'Pool size must be greater than 0');
   }
-  
+
   final int poolSize = 10;
   final String host = env['host'] as String;
   final int port = int.parse(env['port'].toString());
@@ -26,7 +21,11 @@ class Connection {
       final connection = PostgreSQLConnection(host, port, database,
           username: username, password: password);
       await connection.open();
-      _connections.add(connection);
+      if (connection.isClosed) {
+        throw Exception('Connection is closed');
+      } else {
+        _connections.add(connection);
+      }
     }
   }
 
@@ -43,7 +42,9 @@ class Connection {
 
   Future<void> closeConnections() async {
     for (var connection in _connections) {
-      await connection.close();
+      if (!connection.isClosed) {
+        await connection.close();
+      }
     }
   }
 }

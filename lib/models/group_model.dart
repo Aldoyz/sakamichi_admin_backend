@@ -2,7 +2,6 @@ import 'package:postgres/postgres.dart';
 import 'package:sakamichi_admin/database/tables.dart';
 
 class Group {
-  static String table = Tables.group;
   int? id;
   String? romaji_name;
   String? kanji_name;
@@ -13,6 +12,7 @@ class Group {
   String? debut_single;
   String? producer;
   String? official_site;
+  String? logo_url;
 
   Group({
     this.id,
@@ -25,6 +25,7 @@ class Group {
     required this.debut_single,
     required this.producer,
     required this.official_site,
+    required this.logo_url,
   });
 
   Group copyWith({
@@ -38,6 +39,7 @@ class Group {
     String? debut_single,
     String? producer,
     String? official_site,
+    String? logo_url,
   }) {
     return Group(
       id: id ?? this.id,
@@ -50,6 +52,7 @@ class Group {
       debut_single: debut_single ?? this.debut_single,
       producer: producer ?? this.producer,
       official_site: official_site ?? this.official_site,
+      logo_url: logo_url ?? this.logo_url,
     );
   }
 
@@ -69,6 +72,7 @@ class Group {
       debut_single: json['debut_single'] as String?,
       producer: json['producer'] as String?,
       official_site: json['official_site'] as String?,
+      logo_url: json['logo_url'] as String?,
     );
   }
 
@@ -86,6 +90,7 @@ class Group {
         'debut_single': debut_single,
         'producer': producer,
         'official_site': official_site,
+        'logo_url': logo_url,
       };
 
   Map<String, dynamic> toDatabase() {
@@ -103,169 +108,9 @@ class Group {
       'debut_single': debut_single,
       'producer': producer,
       'official_site': official_site,
+      'logo_url': logo_url,
     };
   }
 
-  static Future<void> insert(
-    PostgreSQLConnection connection,
-    Group? data,
-  ) async {
-    var keys = '';
-    var values = '';
-    data?.toJson().keys.forEach((key) {
-      if (keys != '') {
-        keys += ', ';
-        values += ', ';
-      }
-      keys += key;
-      values += '@$key';
-    });
-
-    await connection.query(
-      'INSERT INTO "$table" ($keys) '
-      'VALUES ($values)',
-      substitutionValues: data?.toJson(),
-    );
-  }
-
-  static Future<Group> selectOne(
-    PostgreSQLConnection connection,
-    int id,
-  ) async {
-    final result = await connection.mappedResultsQuery(
-      'SELECT * FROM "$table" '
-      'WHERE id = $id',
-    );
-    final data = result.map((e) => Group.fromJson(e[table]!)).toList();
-    return data.first;
-  }
-
-  static Future<List<Group>> listAll(
-    PostgreSQLConnection connection,
-  ) async {
-    final result = await connection
-        .mappedResultsQuery('SELECT * FROM "$table" ORDER BY id ASC');
-    final data = result.map((e) => Group.fromJson(e[table]!)).toList();
-    return data;
-  }
-
-  static Future<void> update(
-    PostgreSQLConnection connection,
-    Group? data,
-    int id,
-  ) async {
-    var values = '';
-    final nonNullEntries = data
-        ?.toJson()
-        .entries
-        .where((entry) => entry.value != null && entry.value != '')
-        .toList();
-    data?.toJson().forEach((key, value) {
-      if (key == 'id') {
-      } else if (key == 'romaji_name') {
-        if (data.romaji_name != null && data.romaji_name != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'kanji_name') {
-        if (data.kanji_name != null && data.kanji_name != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'debut_date') {
-        if (data.debut_date != null) {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'disband_date') {
-        if (data.disband_date != null) {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'agency') {
-        if (data.agency != null && data.agency != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'label') {
-        if (data.label != null && data.label != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'debut_single') {
-        if (data.debut_single != null && data.debut_single != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'producer') {
-        if (data.producer != null && data.producer != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      } else if (key == 'official_site') {
-        if (data.official_site != null && data.official_site != '') {
-          values += "$key = '$value'";
-          final currentIndex =
-              nonNullEntries?.indexWhere((entry) => entry.key == key);
-          final lastIndex = nonNullEntries!.length - 1;
-          if (currentIndex != lastIndex && nonNullEntries.isNotEmpty) {
-            values += ', ';
-          }
-        }
-      }
-    });
-
-    await connection.query(
-      'UPDATE "$table" '
-      'SET $values '
-      'WHERE id = $id',
-    );
-  }
-
-  static Future<void> delete(
-    PostgreSQLConnection connection,
-    int id,
-  ) async {
-    await connection.query('DELETE FROM "$table" WHERE id = $id');
-  }
+  
 }

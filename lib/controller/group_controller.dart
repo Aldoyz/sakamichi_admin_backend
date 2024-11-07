@@ -4,13 +4,19 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:sakamichi_admin/models/general_response.dart';
 import 'package:sakamichi_admin/models/group_model.dart';
 import 'package:sakamichi_admin/services/group_service.dart';
+import 'package:sakamichi_admin/services/upload_service.dart';
 
 class GroupController {
   static Future<Response> addGroup(RequestContext context) async {
+    final formData = await context.request.formData();
+    final imageFile = formData.files['image']!.name;
+    final imagePath = formData.fields['path']!;
     final groupService = context.read<GroupService>();
     final group = Group.fromJson(
       await context.request.json() as Map<String, dynamic>,
     );
+    final imageUrl = await uploadImage(imageFile, imagePath);
+    group.logo_url = imageUrl;
     await groupService.insert(group);
     return Response.json(
       statusCode: HttpStatus.created,
@@ -66,6 +72,20 @@ class GroupController {
         status: true,
         message: 'All Group Has Been Listed',
         data: data,
+      ),
+    );
+  }
+
+  static Future<Response> uploadFile(RequestContext context) async {
+    // final uploadService = context.read<UploadService>();
+    final formData = await context.request.formData();
+    final file = formData.keys;
+    print(file);
+    // final upload = await uploadService.uploadFile();
+    return Response.json(
+      body: GeneralResponse(
+        status: true,
+        message: file.toString(),
       ),
     );
   }
